@@ -5,6 +5,6 @@ do curso de Ciência da Computação - UFAL 2024.2
 
 
 ## :pushpin: Primeiro Projeto
-Criar um Sistema de Planejamento de Matrícula no qual 
+Criar um **Sistema de Planejamento de Matrícula** no qual 
 será gerado um aconselhamento pedagógico.
  
