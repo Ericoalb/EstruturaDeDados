@@ -10,7 +10,23 @@ typedef struct   // Estrutura para receber a letra + o peso/valor;
 
 }matriz;
 
-int CalcularNome(matriz tabela[3][12], char nome[50]);
+typedef struct
+{
+    char nome[50];
+    char codigo[8];
+    int carga_horaria;
+    int dias;
+    char turno;
+    int hora;
+
+}disciplina;
+
+
+
+void LowerCase(char nome[50]);
+void SemPrepo(char nome[50]);
+int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4]);
+void MostrasGradeCompleta(disciplina quadro[8][5]);
 
 int main()
 {
@@ -26,21 +42,27 @@ int main()
 
 
 
+    disciplina quadro[8][5] = {{{"PROGRAMAÇAO 1", "COMP359", 72, 6, 'M', 56}}};
+
+    
+
     fgets(nome, 50, stdin);
     nome[strcspn(nome, "\n")] = '\0';
-
-    int retorno = CalcularNome(tabela, nome);
-
-    printf("%d\n", retorno);
+    LowerCase(nome);
+    SemPrepo(nome);
+    CalcularNome(tabela, nome, soma_nome);
     
     return 0;
 }
 
-int CalcularNome(matriz tabela[3][12], char nome[50])
+
+int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
 {
-    int i = 0;
+    int i = 0; // indice para percorrer a string do "nome"
+    int l = 0; // indice para armazenar a soma dos nomes separados 
+               // exp "(erico = 18) soma_nome[l] = 18" "(almeida = 29) soma_nome[l] = 29"
     int soma = 0;
-    
+
     while(nome[i] != '\0')
     {
         int valido = 0;
@@ -49,9 +71,9 @@ int CalcularNome(matriz tabela[3][12], char nome[50])
         {
             for(int k = 0; k < 12; k++) // Coluna da Matriz
             {
-                // Inicializando uma variável temporária de tamanho 3, para não bugar com acentos,
-                // Ela recebe o caracter do nome[i] e o '\0'
-                // Criei essa variável por que o C não permite comparar um caracter: nome[i], com uma string, tabela[j][k].letra
+                // Inicializando a variável temp de tamanho 3, para não bugar com acentos,
+                // Ela recebe o caracter do (nome[i]) e o '\0'
+                // Criei essa variável por que o C não permite comparar o caracter que esta dentro do (nome[i]), com a string (tabela[j][k].letra)
                 
                 char temp[3] = {nome[i], '\0'};   // temp[0] = nome[i];
                                                  //  temp[1] = '\0';
@@ -61,17 +83,90 @@ int CalcularNome(matriz tabela[3][12], char nome[50])
                 {
                     soma += tabela[j][k].peso;  // Somando os pesos das letras
                     valido = 1;                 
-                    break;    // Como só comparamos uma letra por vez, não precisamos percorer toda a matriz
+                    break;    // Como só comparamos uma letra por vez, não precisamos percorer todas as colunas da matriz
                 }
             }
 
-            if(valido) break; // para não percorrer toda a matriz
+            if(valido) break; // para não percorrer todas as linhas matriz
+        }
+
+        if (nome[i] == ' ' && i != 0)
+        {
+            soma_nome[l] = soma;
+            soma = 0;
+            l++;
         }
 
         i++;
     }
 
+    soma_nome[l] = soma;
+
     return soma;
 }
 
+void SemPrepo(char nome[50])
+{
+    // Função para retirar as preposições dos nomes
+    // "de", "dos"... 
+    int i = 0;
 
+    while(nome[i] != '\0')
+    {
+        if(nome[i] == ' ')
+        {
+
+            if (nome[i + 4] == ' ')
+            {
+                nome[i + 1] = '*';
+                nome[i + 2] = '*';
+                nome[i + 3] = '*';
+                nome[i + 4] = '*'; 
+            }
+    
+            else if (nome[i + 3] == ' ')
+            {
+                nome[i + 1] = '*';
+                nome[i + 2] = '*';
+                nome[i + 3] = '*';
+            }
+        }
+
+        i++;
+
+    }
+
+    return;
+}
+
+void LowerCase(char nome[50])
+{
+
+    // de maiusculo para minusculo, somamos mais 32;
+
+    int i = 0;
+
+    while(nome[i] != '\0')
+    {
+        if (nome[i] >= 'A' && nome[i] <= 'Z')
+        {
+            nome[i] += 32;
+        }
+
+        i++;
+    }
+
+    return;
+}
+
+void MostrarGradeCompleta(disciplina quadro[8][5])
+{
+    printf("___________________________________________________________________\n");
+    printf("|        |                                                         |\n");
+    printf("|SEMESTRE|                      DISCIPLINAS                        |\n");
+    printf("|________|_________________________________________________________|\n");
+    printf("|        |                                                         |\n");
+    printf("|   01   |%s|\n",quadro[0][0].nome);
+    printf("|________|");
+
+}
