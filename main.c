@@ -33,6 +33,7 @@ int main()
     
     setlocale(LC_ALL, "pt_BR.UTF-8"); // Garantindo que não haverá bugs com os acentos
     char nome[50];
+    int soma_nome[4];
 
     // Matriz de estuturas para armazenar em cada posição a "estrutura matriz" com  
     // sua rescptiva letra e peso/valor
