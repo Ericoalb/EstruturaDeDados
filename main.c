@@ -42,23 +42,19 @@ int main()
                             {{"z", 3}, {"x", 4}, {"c", 9}, {"v", 8}, {"b", 3}, {"n", 2}, {"m", 5}, {"ó", 6}, {"õ", 7}, {"ô", 6}, {"â", 1}, {"ê", 2}}};
 
 
-
-    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "2T34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "2T56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "35T3456"}, {"PROGRAMAÇAO 1", "COMP359", 72,"6T3456"}},
+    // FALTA COMPLETAR COM AS ACEs E ALGUMAS DICIPLINAS DO 6,7 E 8 PERÍODO
+    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02T34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02T56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "35T3456"}, {"PROGRAMAÇAO 1", "COMP359", 72,"06T3456"}},
                                {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34"}, {"BANCO DE DADOS", "COMP365", 72, "24T12"}, {"ESTRUTURA DE DADOS", "COMP364", 72, "35T12"}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "35T34"}},
                                {{"ALGEBRA LINEAR", "COMP371", 72, "24M34"}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24M56"}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25T12"}, {"REDES DE COMPUTADORES", "COMP368", 72, "24T34"}},
-                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25T56"}, {"PROGRAMACAO 3", "COMP373", 72, "35T34"}, {"PROJETO DE SOFTWARE", ""}}};
+                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25T56"}, {"PROGRAMACAO 3", "COMP373", 72, "35T34"}, {"PROGRAMACAO ", "COMP372", 72, "04T3456"}},
+                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24T12"}, {"COMPILADORES", "COMP379", 72, "24T34"}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35T34"},{"COMPUTACAO GRAFICA", "COMP381", 72, "35T56"}},
+                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "245M3456"}},
+                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35T12"}, {"NOCOES DE DIREITO", "COMP387", 72, "03T3456"}}};
 
-    
 
     Entrada(nome, soma_nome, tabela);
-    
+    scanf("%d", periodo);
 
-    for(int i = 0; i < 4; i++)
-    {
-        printf("%d ", soma_nome[i] % 3);
-    }
-
-    
     return 0;
 }
 
@@ -69,6 +65,7 @@ void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12])
     LowerCase(nome);
     SemPrepo(nome);
     CalcularNome(tabela, nome, soma_nome);
+    return;
 }
 
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
