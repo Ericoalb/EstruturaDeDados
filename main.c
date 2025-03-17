@@ -15,26 +15,26 @@ typedef struct
     char nome[50];
     char codigo[8];
     int carga_horaria;
-    int dias;
-    char turno;
-    int hora;
+    char horario[8];
 
 }disciplina;
 
 
-
+// FUNCOES;
 void LowerCase(char nome[50]);
 void SemPrepo(char nome[50]);
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4]);
 void MostrasGradeCompleta(disciplina quadro[8][5]);
+void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12]);
 
 int main()
 {
-    
-    setlocale(LC_ALL, "pt_BR.UTF-8"); // Garantindo que não haverá bugs com os acentos
     char nome[50];
     int soma_nome[4];
+    int periodo;
 
+    setlocale(LC_ALL, "pt_BR.UTF-8"); // Garantindo que não haverá bugs com os acentos
+    
     // Matriz de estuturas para armazenar em cada posição a "estrutura matriz" com  
     // sua rescptiva letra e peso/valor
     matriz tabela[3][12] = {{{"q", 1}, {"w", 6}, {"e", 7}, {"r", 6}, {"t", 5}, {"y", 2}, {"u", 3}, {"i", 8}, {"o", 9}, {"p", 4}, {"á", 3}, {"ã", 4}}, 
@@ -43,19 +43,33 @@ int main()
 
 
 
-    disciplina quadro[8][5] = {{{"PROGRAMAÇAO 1", "COMP359", 72, 6, 'M', 56}}};
+    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "2T34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "2T56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "35T3456"}, {"PROGRAMAÇAO 1", "COMP359", 72,"6T3456"}},
+                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34"}, {"BANCO DE DADOS", "COMP365", 72, "24T12"}, {"ESTRUTURA DE DADOS", "COMP364", 72, "35T12"}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "35T34"}},
+                               {{"ALGEBRA LINEAR", "COMP371", 72, "24M34"}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24M56"}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25T12"}, {"REDES DE COMPUTADORES", "COMP368", 72, "24T34"}},
+                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25T56"}, {"PROGRAMACAO 3", "COMP373", 72, "35T34"}, {"PROJETO DE SOFTWARE", ""}}};
 
     
 
+    Entrada(nome, soma_nome, tabela);
+    
+
+    for(int i = 0; i < 4; i++)
+    {
+        printf("%d ", soma_nome[i] % 3);
+    }
+
+    
+    return 0;
+}
+
+void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12])
+{
     fgets(nome, 50, stdin);
     nome[strcspn(nome, "\n")] = '\0';
     LowerCase(nome);
     SemPrepo(nome);
     CalcularNome(tabela, nome, soma_nome);
-    
-    return 0;
 }
-
 
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
 {
