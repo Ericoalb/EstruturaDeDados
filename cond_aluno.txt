@@ -1,0 +1,28 @@
+// Números máximo de Disciplinas por Período
+    8 disciplinas
+    Resto = 1;
+    
+// Conlusão do Curso
+    Menor tempo possível
+    Resto = 0.
+    
+// Escolha da Enfase
+    Nenhuma (que sorte! ;)
+    Resto = 2;
+    
+// Orientaçao para escolha das Disciplinas
+    O aluno não deve extrapola o limite de 3 disciplinas no máximo por dia, 
+    mais deve ir todos os dias a ufal
+    Resto = 2 ;
+
+
+// Resumo;
+
+Nosso Algoritmo deve colocar o máximo de disciplinas (respeitando o carga horária máxima)
+para fazer com que nosso aluno complete o curso no menor tempo. Contudo, devemos alocar no máximo
+3 disciplinas por dia, com também nosso estudante precisa estar todos os dias na ufal. triste pra ele ;(
+
+
+
+
+    

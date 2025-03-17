@@ -53,7 +53,7 @@ int main()
 
 
     Entrada(nome, soma_nome, tabela);
-    scanf("%d", periodo);
+    scanf("%d", &periodo);
 
     return 0;
 }
