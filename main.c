@@ -15,23 +15,28 @@ typedef struct
     char nome[50];
     char codigo[8];
     int carga_horaria;
-    char horario[8];
+    char horario[10];
 
 }disciplina;
 
 
-// FUNCOES;
+// FUNCOES DE ENTRADA
 void LowerCase(char nome[50]);
 void SemPrepo(char nome[50]);
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4]);
+void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12], int *periodo, char copia_nome[50]);
+
+// FUNÇÕES DE TABELA
+void MontarGrade(int i, disciplina[8][5], disciplina minha_grade[8][8]);
 void MostrasGradeCompleta(disciplina quadro[8][5]);
-void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12]);
 
 int main()
 {
     char nome[50];
+    char copia_nome[50];
     int soma_nome[4];
     int periodo;
+    disciplina minha_grade[8][8];
 
     setlocale(LC_ALL, "pt_BR.UTF-8"); // Garantindo que não haverá bugs com os acentos
     
@@ -43,28 +48,50 @@ int main()
 
 
     // FALTA COMPLETAR COM AS ACEs E ALGUMAS DICIPLINAS DO 6,7 E 8 PERÍODO
-    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02T34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02T56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "35T3456"}, {"PROGRAMAÇAO 1", "COMP359", 72,"06T3456"}},
-                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34"}, {"BANCO DE DADOS", "COMP365", 72, "24T12"}, {"ESTRUTURA DE DADOS", "COMP364", 72, "35T12"}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "35T34"}},
-                               {{"ALGEBRA LINEAR", "COMP371", 72, "24M34"}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24M56"}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25T12"}, {"REDES DE COMPUTADORES", "COMP368", 72, "24T34"}},
-                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25T56"}, {"PROGRAMACAO 3", "COMP373", 72, "35T34"}, {"PROGRAMACAO ", "COMP372", 72, "04T3456"}},
-                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24T12"}, {"COMPILADORES", "COMP379", 72, "24T34"}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35T34"},{"COMPUTACAO GRAFICA", "COMP381", 72, "35T56"}},
-                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "245M3456"}},
-                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35T12"}, {"NOCOES DE DIREITO", "COMP387", 72, "03T3456"}}};
+    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02M34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02M56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "356T234"}, {"PROGRAMAÇAO 1", "COMP359", 72,"06M3456"}, {"MATEMÁTICA DISCRETA", "ECOM003", 72, "24M12"}},
+                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34"}, {"BANCO DE DADOS", "COMP365", 72, "35T12"}, {"ESTRUTURA DE DADOS", "COMP364", 72, "24T34"}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "24T12"}},
+                               {{"ALGEBRA LINEAR", "COMP371", 72, "24T34"}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24T12"}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25M34"}, {"REDES DE COMPUTADORES", "COMP368", 72, "34M56"}},
+                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25M56"}, {"PROGRAMACAO 3", "COMP373", 72, "34T34"}, {"PROGRAMACAO 2", "COMP372", 72, "35T12"}},
+                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24M34"}, {"COMPILADORES", "COMP379", 72, "24M56"}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35M34"},{"COMPUTACAO GRAFICA", "COMP381", 72, "36M56"}},
+                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "2356T1234"}},
+                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34"}, {"NOCOES DE DIREITO", "COMP387", 72, "05T1234"}}};
 
 
-    Entrada(nome, soma_nome, tabela);
-    scanf("%d", &periodo);
+    Entrada(nome, soma_nome, tabela, &periodo, copia_nome);
+    
+    switch(periodo)
+    {
+        case 1:
+        {
+            MontarGrade(periodo, quadro, minha_grade);
+            break;
+        }
+
+    }
+
+    for(int i = 1; i < 8; i++)
+    {
+        for(int j = 0; j < 8; j++)
+        {
+
+            printf("%s \n", minha_grade[i][j].nome);
+        }
+
+        printf("\n");
+    }
 
     return 0;
 }
 
-void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12])
+void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12], int *periodo, char copia_nome[50])
 {
     fgets(nome, 50, stdin);
     nome[strcspn(nome, "\n")] = '\0';
+    strcpy(copia_nome, nome);
     LowerCase(nome);
     SemPrepo(nome);
     CalcularNome(tabela, nome, soma_nome);
+    scanf("%d", periodo);
     return;
 }
 
@@ -181,4 +208,57 @@ void MostrarGradeCompleta(disciplina quadro[8][5])
     printf("|   01   |%s|\n",quadro[0][0].nome);
     printf("|________|");
 
+}
+
+void MontarGrade(int i, disciplina quadro[8][5], disciplina minha_grade[8][8])
+{
+
+    int soma = 0; // soma da carga horária
+
+    while(i < 8) // linha da matriz minha_grade, como também referência de indice para acessar as linhas da matriz quadro
+    {
+        for(int k = 0; k < 8; k++) // coluna da matriz minha_grade
+        {
+            if (k < 4 && i < 5)                 // Adicionando as 4 disciplinas obrigatórias e indo até o 5 período
+            {
+                minha_grade[i][k] = quadro[i][k];
+                soma += quadro[i][k].carga_horaria;
+            }
+
+            else if (i < 5)                 // Já adicionamos na grade todas as 4 disciplinas obrigatórias até o 5 período;
+            {
+                if(soma <= 576)
+                {
+                    for (int l = i + 1; l < 3; l++) // indice do Próximo período
+                    {
+                        for(int m = 0; m < 5; m++)  // Verificando se as disciplinas terão choque de horário, indice da coluna da matriz quadro
+                        {
+                            int choque = 0;
+
+                            for(int o = 0; o < k; o++) /// Indice da coluna da matriz minha_grade;
+                            {
+                                if(strcmp(quadro[l][m].horario, minha_grade[i][o].horario) == 0) choque = 1;
+                                if(choque == 1 ) break;
+                            }
+
+                            if(choque == 0)
+                            {
+                                soma += quadro[l][m].carga_horaria;
+
+                                if(soma <= 576)
+                                {
+                                    minha_grade[i][k] = quadro[l][m];
+                                }
+
+                                else soma -= quadro[l][m].carga_horaria;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        i++;
+    }
 }
