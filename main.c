@@ -1,281 +1,252 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <locale.h>
+#include "funcoes.h"
+#define TAM 9
 
-
-typedef struct   // Estrutura para receber a letra + o peso/valor;
+int main ()
 {
-    char letra[3]; // char de tamanho 3, pois o caractere com acento ocupa 3 bytes
-    int peso; 
+    Aluno discet;
+    float media;
+    float soma = 0;
+    int clas[3] = {0}; // array para armazenar a classe da disciplina
 
-}matriz;
-
-
-typedef struct main
-{
-   char requi [3][8]; // codigo das disciplinas requisitadas
-   int quant; // quantidad de pre-requisitos;
-}requisitos;
-
-
-typedef struct
-{
-    char nome[50];
-    char codigo[8];
-    int carga_horaria;
-    char horario[10];
-    int  class;       // 0 materias teorica, 1 materias de calculo e 2 materias de programa
-    int pre;          // 1 tem pre-requisito, 0 não tem pre-requisito
-    requisitos requi;
-
-}disciplina;
-
-
-
-// FUNCOES DE ENTRADA
-void LowerCase(char nome[50]);
-void SemPrepo(char nome[50]);
-int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4]);
-void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12], int *periodo, char copia_nome[50]);
-
-// FUNÇÕES DE TABELA
-void MontarGrade(int i, disciplina[8][5], disciplina minha_grade[8][8]);
-void MostrasGradeCompleta(disciplina quadro[8][5]);
-
-int main()
-{
-    char nome[50];
-    char copia_nome[50];
-    int soma_nome[4];
-    int periodo;
-    disciplina minha_grade[8][8];
-
-    setlocale(LC_ALL, "pt_BR.UTF-8"); // Garantindo que não haverá bugs com os acentos
+    media = Entrada(TAM, 0, &discet);
     
-    // Matriz de estuturas para armazenar em cada posição a "estrutura matriz" com  
-    // sua rescptiva letra e peso/valor
-    matriz tabela[3][12] = {{{"q", 1}, {"w", 6}, {"e", 7}, {"r", 6}, {"t", 5}, {"y", 2}, {"u", 3}, {"i", 8}, {"o", 9}, {"p", 4}, {"á", 3}, {"ã", 4}}, 
-                            {{"a", 2}, {"s", 5}, {"d", 8}, {"f", 7}, {"g", 4}, {"h", 1}, {"j", 4}, {"k", 7}, {"l", 8}, {"ç", 5}, {"é", 2}, {"í", 3}},
-                            {{"z", 3}, {"x", 4}, {"c", 9}, {"v", 8}, {"b", 3}, {"n", 2}, {"m", 5}, {"ó", 6}, {"õ", 7}, {"ô", 6}, {"â", 1}, {"ê", 2}}};
 
-
-    // FALTA COMPLETAR COM AS ACEs E ALGUMAS DICIPLINAS DO 6,7 E 8 PERÍODO
-    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02M34", 0, 0}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02M56", 0, 0}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "356T234", 1, 0}, {"PROGRAMAÇAO 1", "COMP359", 72,"06M3456", 2, 0}, {"MATEMÁTICA DISCRETA", "ECOM003", 72, "24M12", 1, 0}},
-                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34", 1, 0}, {"BANCO DE DADOS", "COMP365", 72, "35T12", 2, 0}, {"ESTRUTURA DE DADOS", "COMP364", 72, "24T34", 2, 1,"COMP359","*","*",1}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "24T12", 0, 0}},
-                               {{"ALGEBRA LINEAR", "COMP371", 72, "24T34", 0, 1, "COMP367", "*", "*", 1}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24T12", 0, 1, "COMP363", "*", "*", 1}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25M34", 2, 1, "COMP364", "COMP362","*", 2}, {"REDES DE COMPUTADORES", "COMP368", 72, "34M56", 0, 1, "COMP359", "*", "*", 1}},
-                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12", 0, 0}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25M56", 2, 1, "COMP364", "COMP369", "*", 2}, {"PROGRAMACAO 3", "COMP373", 72, "34T34", 2, 1, "COMP364", "COMP365", "COMP368", 3}, {"PROGRAMACAO 2", "COMP372", 72, "35T12", 2, 1, "COMP364", "COMP365", "COMP368", 3}},
-                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24M34", 0, 1, "COMP366", "*", "*", 1}, {"COMPILADORES", "COMP379", 72, "24M56", 2, 1, "COMP364", "COMP376", "*", 2}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35M34", 2, 1, "COMP364", "COMP360", "*", 2},{"COMPUTACAO GRAFICA", "COMP381", 72, "36M56", 2, 0}},
-                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "2356T1234", 2, 1,"COMP364","COMP370", "COMP374", 3}},
-                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34", 0, 0}, {"NOCOES DE DIREITO", "COMP387", 72, "05T1234", 0, 0}}};
-
-
-
-    
-    printf("%d ", quadro[1][2].requi.quant);                   
-    /*
-    Entrada(nome, soma_nome, tabela, &periodo, copia_nome);
-    
-    switch(periodo)
+    // Printatndo // desordenado
+    for(int i = 0; i < TAM; i++)
     {
-        case 1:
+        if (i == 0)
         {
-            MontarGrade(periodo, quadro, minha_grade);
-            break;
-        }
-
-    }
-
-    for(int i = 1; i < 8; i++)
-    {
-        for(int j = 0; j < 8; j++)
-        {
-
-            printf("%s \n", minha_grade[i][j].nome);
-        }
-
-        printf("\n");
-    }
-    */
-    return 0;
-}
-
-void Entrada(char nome[50], int soma_nome[4], matriz tabela[3][12], int *periodo, char copia_nome[50])
-{
-    fgets(nome, 50, stdin);
-    nome[strcspn(nome, "\n")] = '\0';
-    strcpy(copia_nome, nome);
-    LowerCase(nome);
-    SemPrepo(nome);
-    CalcularNome(tabela, nome, soma_nome);
-    scanf("%d", periodo);
-    return;
-}
-
-int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
-{
-    int i = 0; // indice para percorrer a string do "nome"
-    int l = 0; // indice para armazenar a soma dos nomes separados 
-               // exp "(erico = 18) soma_nome[l] = 18" "(almeida = 29) soma_nome[l] = 29"
-    int soma = 0;
-
-    while(nome[i] != '\0')
-    {
-        int valido = 0;
-
-        for(int j = 0; j < 3; j++) // Linha da matriz
-        {
-            for(int k = 0; k < 12; k++) // Coluna da Matriz
+            int j = 0;
+            printf("(");
+            while(j < TAM)
             {
-                // Inicializando a variável temp de tamanho 3, para não bugar com acentos,
-                // Ela recebe o caracter do (nome[i]) e o '\0'
-                // Criei essa variável por que o C não permite comparar o caracter que esta dentro do (nome[i]), com a string (tabela[j][k].letra)
-                
-                char temp[3] = {nome[i], '\0'};   // temp[0] = nome[i];
-                                                 //  temp[1] = '\0';
-                
-                if( *temp == *tabela[j][k].letra) // if com strings compara os endereços, então precisamos "desreferenciar com * "
-                                                 // Desse modo, buscamos o valor que está nos endereços, que são os caracteres
+                printf("%d, ", discet.periodo[j]);
+                j++;
+            }
+            printf(")\n");
+        }
+
+
+        printf("%s %.2f\n", discet.cod[i], discet.media[i]);    
+        
+    }
+
+    // Ordenando as médias em ordem decrescente
+    Ordene(TAM, &discet);
+
+    printf("\n\n");
+
+    // Printatndo // Ordenado
+    for(int i = 0; i < TAM; i++)
+    {
+        if (i == 0)
+        {
+            int j = 0;
+            printf("(");
+            while(j < TAM)
+            {
+                printf("%d, ", discet.periodo[j]);
+                j++;
+            }
+            printf(")\n");
+        }
+
+
+        printf("%s %.2f\n", discet.cod[i], discet.media[i]);    
+        
+    }
+
+    printf("Essa é a média: %.2f", media);
+
+
+    // Buscando as melhores diciplinas do aluno com base na nota e classe da matéria;
+    for(int i = 0; i < TAM; i++)
+    {
+        if(discet.media[i] > media)  // caso a nota seja maior que a médias das notas;
+        {
+            for(int j = 0; j < 8; j++) // Percorrendo toda a tabela de disciplinas 
+            {
+                for (int k = 0; k < 5; k++)
                 {
-                    soma += tabela[j][k].peso;  // Somando os pesos das letras
-                    valido = 1;                 
-                    break;    // Como só comparamos uma letra por vez, não precisamos percorer todas as colunas da matriz
-                }
-            }
-
-            if(valido) break; // para não percorrer todas as linhas matriz
-        }
-
-        if (nome[i] == ' ' && i != 0)
-        {
-            soma_nome[l] = soma;
-            soma = 0;
-            l++;
-        }
-
-        i++;
-    }
-
-    soma_nome[l] = soma;
-
-    return soma;
-}
-
-void SemPrepo(char nome[50])
-{
-    // Função para retirar as preposições dos nomes
-    // "de", "dos"... 
-    int i = 0;
-
-    while(nome[i] != '\0')
-    {
-        if(nome[i] == ' ')
-        {
-
-            if (nome[i + 4] == ' ')
-            {
-                nome[i + 1] = '*';
-                nome[i + 2] = '*';
-                nome[i + 3] = '*';
-                nome[i + 4] = '*'; 
-            }
-    
-            else if (nome[i + 3] == ' ')
-            {
-                nome[i + 1] = '*';
-                nome[i + 2] = '*';
-                nome[i + 3] = '*';
-            }
-        }
-
-        i++;
-
-    }
-
-    return;
-}
-
-void LowerCase(char nome[50])
-{
-
-    // de maiusculo para minusculo, somamos mais 32;
-
-    int i = 0;
-
-    while(nome[i] != '\0')
-    {
-        if (nome[i] >= 'A' && nome[i] <= 'Z')
-        {
-            nome[i] += 32;
-        }
-
-        i++;
-    }
-
-    return;
-}
-
-void MostrarGradeCompleta(disciplina quadro[8][5])
-{
-    printf("___________________________________________________________________\n");
-    printf("|        |                                                         |\n");
-    printf("|SEMESTRE|                      DISCIPLINAS                        |\n");
-    printf("|________|_________________________________________________________|\n");
-    printf("|        |                                                         |\n");
-    printf("|   01   |%s|\n",quadro[0][0].nome);
-    printf("|________|");
-
-}
-
-void MontarGrade(int i, disciplina quadro[8][5], disciplina minha_grade[8][8])
-{
-
-    int soma = 0; // soma da carga horária
-
-    while(i < 8) // linha da matriz minha_grade, como também referência de indice para acessar as linhas da matriz quadro
-    {
-        for(int k = 0; k < 8; k++) // coluna da matriz minha_grade
-        {
-            if (k < 4 && i < 5)                 // Adicionando as 4 disciplinas obrigatórias e indo até o 5 período
-            {
-                minha_grade[i][k] = quadro[i][k];
-                soma += quadro[i][k].carga_horaria;
-            }
-
-            else if (i < 5)                 // Já adicionamos na grade todas as 4 disciplinas obrigatórias até o 5 período;
-            {
-                if(soma <= 576)
-                {
-                    for (int l = i + 1; l < 3; l++) // indice do Próximo período
+                    if(strcmp(discet.cod[i], quadro[j][k].codigo) == 0) // verificando se o código da dicipina que o aluno cursou é igual ao código que está na tabela de disciplinas( se são igauis) 
                     {
-                        for(int m = 0; m < 5; m++)  // Verificando se as disciplinas terão choque de horário, indice da coluna da matriz quadro
+                        switch(quadro[j][k].classe) // Somando quantas vezes uma materias de cada classe aparece;
                         {
-                            int choque = 0;
-
-                            for(int o = 0; o < k; o++) /// Indice da coluna da matriz minha_grade;
+                            case 0:                 //Como também alocando na posição correta do vetor 
                             {
-                                if(strcmp(quadro[l][m].horario, minha_grade[i][o].horario) == 0) choque = 1;
-                                if(choque == 1 ) break;
+                                clas[0] += 1;
+                                break; 
                             }
 
-                            if(choque == 0)
+                            case 1:
                             {
-                                soma += quadro[l][m].carga_horaria;
+                                clas[1] += 1;
+                                break;
+                            }
 
-                                if(soma <= 576)
-                                {
-                                    minha_grade[i][k] = quadro[l][m];
-                                }
-
-                                else soma -= quadro[l][m].carga_horaria;
+                            case 2:
+                            {
+                                clas[2] += 1;
+                                break;
                             }
                         }
                     }
                 }
             }
-
         }
-
-        i++;
     }
+
+    printf("\n");
+
+    for (int i = 0; i < 3; i++)
+    {
+        printf("%d ", clas[i]);
+    }
+
+    
+    // retornar  a  maior classe (na qual o aluno se saiu melhor, com base na quatida de vezes que ela apreceu)
+    int maior_c = MaiorClasse(clas);
+    printf("\n%d\n", maior_c);
+
+    // Verificando quais matérias podemos alocar(adiantar) para o aluno;
+    int indi = 0;
+    for(int i = (discet.periodo[0] + 1); i < 8; i++) // Percorrendo as diciplinas a partir do semestre informado + 1
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            if(quadro[i][j].pre == 0) // Verificando se existe pre-requisito, nesse caso não tem;
+            {
+                int cont = 0;
+                for(int k = 0; k < 5; k++) // Irei comparar a diciplina da linha i, com todas as diciplinas das linha i - 1, 
+                {                          // para achar algum choque de horário
+                    
+                    if(strcmp(quadro[i][j].horario, quadro[i - 1][k].horario) == 0) cont = 1; // Verificando se ha choque de horários;
+
+                    if (cont == 1) break;
+                }
+
+                if (cont == 0)
+                {
+                    strcpy(discet.disc[indi], quadro[i][j].codigo); // copiando o código da materia para as diciplinas que podem se adiantadas 
+                    indi++; // salvando a quantida de de disciplinas;
+                }
+            }
+
+            else if (quadro[i][j].pre == 1) // existe o pre-requisito
+            {
+               int sum = 0;
+               switch(quadro[i][j].requi.quant) // Escolhendo quantas matérias de pre-requisitos são necessárias;
+               {
+                    case 1: // Somente 1 pre-requisito
+                    {
+                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
+                        {
+                            for(int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
+                            {
+                                if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) // Verificando se o aluno tem a matérias necessária
+                                {
+                                    int cont = 0;
+                                    for(int n = 0; n = 5; n ++) // Verificando se ha choque de horário com as diciplinas;
+                                    {
+                                        if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; 
+                                        if (cont = 1) break;
+
+                                    }
+
+                                    if (cont == 0)
+                                    {
+                                        strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
+                                        indi++;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 2: // 2 pre-requisitos
+                    {
+                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
+                        {
+                            for( int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
+                            {
+                                if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) sum++;
+                                
+                            }
+                        }
+
+                        if (sum == 2) // verificando se os 2 pre-requisitos foram atendidos
+                        {
+                            int cont = 0;
+                            for(int n = 0; n = 5; n ++) // Verificando se ha choque de horário com as diciplinas;
+                            {
+                                if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; // Verificando se ha choque de horário
+                                if (cont = 1) break;
+
+                            }
+
+                            if (cont == 0)
+                            {
+                                strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
+                                indi++;
+                            }
+
+
+                        }
+
+                        break;
+                    }
+
+                    case 3: // 3 matérias são postas como pre-requisito, porém somente duas são necessárias
+                    {
+                        int check = 0;
+                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
+                        {
+                            for(int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
+                            { 
+                                if (m != 2) // as duas primeiras materias são um (OU), o aluno só precisar ter uma das duas 
+                                {
+                                    if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) sum++;
+                                }
+
+                                else // Essa matéria é obrigarótóri
+                                {
+                                    if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) check = 1;
+                                }
+                            }
+
+                            if(sum > 0 && check > 0) // Verificando se o aluno já cursou pelo menos uma das duas primeiras && se cursou a terceira
+                            {
+                                int cont = 0;
+                                for(int n = 0; n = 5; n ++)
+                                {
+                                    if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; // Verificando se ha choque de horário
+                                    if (cont = 1) break;
+
+                                }
+
+                                if (cont == 0)
+                                {
+                                    strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
+                                    indi++;
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\n%d\n", indi);
+    for(int i = 0; i < indi; i ++)
+    {
+        printf("%s ", discet.disc[i]);
+    }
+
+    return 0;
 }
+
