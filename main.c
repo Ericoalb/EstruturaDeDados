@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <locale.h>
 
+
 typedef struct   // Estrutura para receber a letra + o peso/valor;
 {
     char letra[3]; // char de tamanho 3, pois o caractere com acento ocupa 3 bytes
@@ -10,14 +11,26 @@ typedef struct   // Estrutura para receber a letra + o peso/valor;
 
 }matriz;
 
+
+typedef struct main
+{
+   char requi [3][8]; // codigo das disciplinas requisitadas
+   int quant; // quantidad de pre-requisitos;
+}requisitos;
+
+
 typedef struct
 {
     char nome[50];
     char codigo[8];
     int carga_horaria;
     char horario[10];
+    int  class;       // 0 materias teorica, 1 materias de calculo e 2 materias de programa
+    int pre;          // 1 tem pre-requisito, 0 não tem pre-requisito
+    requisitos requi;
 
 }disciplina;
+
 
 
 // FUNCOES DE ENTRADA
@@ -48,15 +61,19 @@ int main()
 
 
     // FALTA COMPLETAR COM AS ACEs E ALGUMAS DICIPLINAS DO 6,7 E 8 PERÍODO
-    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02M34"}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02M56"}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "356T234"}, {"PROGRAMAÇAO 1", "COMP359", 72,"06M3456"}, {"MATEMÁTICA DISCRETA", "ECOM003", 72, "24M12"}},
-                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34"}, {"BANCO DE DADOS", "COMP365", 72, "35T12"}, {"ESTRUTURA DE DADOS", "COMP364", 72, "24T34"}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "24T12"}},
-                               {{"ALGEBRA LINEAR", "COMP371", 72, "24T34"}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24T12"}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25M34"}, {"REDES DE COMPUTADORES", "COMP368", 72, "34M56"}},
-                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12"}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25M56"}, {"PROGRAMACAO 3", "COMP373", 72, "34T34"}, {"PROGRAMACAO 2", "COMP372", 72, "35T12"}},
-                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24M34"}, {"COMPILADORES", "COMP379", 72, "24M56"}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35M34"},{"COMPUTACAO GRAFICA", "COMP381", 72, "36M56"}},
-                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "2356T1234"}},
-                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34"}, {"NOCOES DE DIREITO", "COMP387", 72, "05T1234"}}};
+    disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "02M34", 0, 0}, {"COMPUTACAO SOCIEDADE E ETICA", "COMP361", 72, "02M56", 0, 0}, {"CALCULO DIFERENCIAL E INTEGRAL", "COMP363", 144, "356T234", 1, 0}, {"PROGRAMAÇAO 1", "COMP359", 72,"06M3456", 2, 0}, {"MATEMÁTICA DISCRETA", "ECOM003", 72, "24M12", 1, 0}},
+                               {{"GEOMETRIA ANALITICA", "COMP367", 72, "24M34", 1, 0}, {"BANCO DE DADOS", "COMP365", 72, "35T12", 2, 0}, {"ESTRUTURA DE DADOS", "COMP364", 72, "24T34", 2, 1,"COMP359","*","*",1}, {"ORG. E ARQ. DE COMPUTADORES","COMP366", 72, "24T12", 0, 0}},
+                               {{"ALGEBRA LINEAR", "COMP371", 72, "24T34", 0, 1, "COMP367", "*", "*", 1}, {"PROBABILIDADE E ESTATISTICA", "COMP370", 72, "24T12", 0, 1, "COMP363", "*", "*", 1}, {"TEORIA DOS GRAFOS", "COMP369", 72,"25M34", 2, 1, "COMP364", "COMP362","*", 2}, {"REDES DE COMPUTADORES", "COMP368", 72, "34M56", 0, 1, "COMP359", "*", "*", 1}},
+                               {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12", 0, 0}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25M56", 2, 1, "COMP364", "COMP369", "*", 2}, {"PROGRAMACAO 3", "COMP373", 72, "34T34", 2, 1, "COMP364", "COMP365", "COMP368", 3}, {"PROGRAMACAO 2", "COMP372", 72, "35T12", 2, 1, "COMP364", "COMP365", "COMP368", 3}},
+                               {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24M34", 0, 1, "COMP366", "*", "*", 1}, {"COMPILADORES", "COMP379", 72, "24M56", 2, 1, "COMP364", "COMP376", "*", 2}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35M34", 2, 1, "COMP364", "COMP360", "*", 2},{"COMPUTACAO GRAFICA", "COMP381", 72, "36M56", 2, 0}},
+                               {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "2356T1234", 2, 1,"COMP364","COMP370", "COMP374", 3}},
+                               {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34", 0, 0}, {"NOCOES DE DIREITO", "COMP387", 72, "05T1234", 0, 0}}};
 
 
+
+    
+    printf("%d ", quadro[1][2].requi.quant);                   
+    /*
     Entrada(nome, soma_nome, tabela, &periodo, copia_nome);
     
     switch(periodo)
@@ -79,7 +96,7 @@ int main()
 
         printf("\n");
     }
-
+    */
     return 0;
 }
 
