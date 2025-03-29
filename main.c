@@ -1,5 +1,5 @@
 #include "funcoes.h"
-#define TAM 17
+#define TAM 5
 
 int main ()
 {
@@ -118,6 +118,7 @@ int main ()
         {
             Grade(&discet);
             Aloque(&discet);
+
             if(discet.id > 0)
             {
                 printf("Disciplinas que você pode adiantar:\n");
@@ -125,26 +126,10 @@ int main ()
                 printf("\n");
             }
 
-            switch(maior_c)
-            {
-                case 0:
-                {
-                    printf("Com base em seu desempenho, priorize matérias de cunho teórico\n");
-                    break;
-                }
+            printf("Prioridades de escolhas Com Base no Desempenho Acadêmico\n");
 
-                case 1:
-                {
-                    printf("Com base em seu desempenho acadêmico, priorize matérias voltadas para o cálculo\n");
-                    break;
-                }
-
-                case 2:
-                {
-                    printf("Com base em seu desempenho acadêmico, priorize matérias que sejam de computação/programação\n");
-                }
-            }
-            
+            Prioridades(maior_c, clas, &discet);
+            printf("\n");
             Horario(&discet);
         }
 

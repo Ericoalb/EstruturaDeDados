@@ -20,6 +20,7 @@ void Preencha(Aluno *discet);
 void Aloque(Aluno *discet);
 void Horario(Aluno *discet);
 void ImprimaDisc(Aluno *discet);
+void Prioridades(int maior_c, int *clas, Aluno *discet);
 
 
 // Scrit das Funcoes
@@ -27,6 +28,7 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
 {
     discet->ip = 0;
     discet->ic = 0;
+    int div = 0;
     // lendo meus períodos
     for (int i = 0; i < 1; i++)
     {
@@ -36,7 +38,7 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
     scanf("%d", &discet->fluxo);
  
     // Lendo minhas notas:
-    int tot = 0; // total de entradas válidas para média
+    
     for(int i = 0; i < TAM; i++)
     {
         scanf("%f", &discet->media[i]);
@@ -45,12 +47,20 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
     // lendo meus códigos da turma;
     for(int i = 0; i < TAM; i++)
     {
-        if(discet->media[i] != -1)
+        if(discet->media[i] >= 7)
         {
             scanf("%s", discet->cod[i]);
             discet->cod[i][strcspn(discet->cod[i], "\n")] = '\0';
             discet->ic += 1;
+            div += 1;
             soma += discet->media[i];
+        }
+
+        else if (discet->media[i] == -1)
+        {
+            scanf("%s", discet->cod_p[i]);
+            discet->cod_p[i][strcspn(discet->cod_p[i], "\n")] = '\0';
+            discet->ip += 1;
         }
 
         else
@@ -58,10 +68,12 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
             scanf("%s", discet->cod_p[i]);
             discet->cod_p[i][strcspn(discet->cod_p[i], "\n")] = '\0';
             discet->ip += 1;
+            div += 1;
+            soma += discet->media[i];
         }
     }
  
-    return (soma / discet->ic);
+    return (soma / div);
 }
 
 void Preencha(Aluno *discet)
@@ -195,7 +207,7 @@ void Aloque(Aluno *discet)
                         int tj; // turno de tempj1
                         int ei = 0; // indice de tempi1
                         int ej = 0; // indice de tempi2
-                        int dia, turno, aula;
+                        int dia = 0, turno = 0, aula = 0;
                         char tempi1[10], tempi2[10], tempj1[10], tempj2[10];
                         strcpy(tempi1, quadro[i][j].horario);
                         strcpy(tempj1, quadro[discet->periodo[0]][k].horario);
@@ -400,10 +412,9 @@ void Aloque(Aluno *discet)
                         }
 
 
-                        if ( dia == 1 && turno == 1 && aula == 1)
+                        if ( dia > 0 && turno > 0 && aula > 0)
                         { 
                           cont = 1;
-                          printf("\n\n\n\nDisciplinas com choque de horários %s\n%s", discet->disc[i].nome, discet->disc[j].nome);
                         }
                         
                     }
@@ -589,7 +600,7 @@ void Aloque(Aluno *discet)
                             int tj; // turno de tempj1
                             int ei = 0; // indice de tempi1
                             int ej = 0; // indice de tempi2
-                            int dia, turno, aula;
+                            int dia = 0, turno = 0, aula = 0;
                             char tempi1[10], tempi2[10], tempj1[10], tempj2[10];
                             strcpy(tempi1, quadro[i][j].horario);
                             strcpy(tempj1, quadro[discet->periodo[0]][k].horario);
@@ -794,7 +805,7 @@ void Aloque(Aluno *discet)
                             }
     
     
-                            if ( dia == 1 && turno == 1 && aula == 1)
+                            if ( dia > 0 && turno > 0 && aula > 0)
                             { 
                               cont = 1;
                               
@@ -833,7 +844,7 @@ void Horario(Aluno *discet)
             int tj; // turno de tempj1
             int ei = 0; // indice de tempi1
             int ej = 0; // indice de tempi2
-            int dia, turno, aula;
+            int dia = 0, turno = 0, aula = 0;
 
             char tempi1[10], tempi2[10], tempj1[10], tempj2[10];
             strcpy(tempi1, discet->disc[i].horario);
@@ -1061,6 +1072,92 @@ void ImprimaDisc(Aluno *discet)
         printf("%s %s %s\n", discet->disc[i].cod, discet->disc[i].nome, discet->disc[i].horario);
     }
 }
+
+void Prioridades(int maior_c, int *clas, Aluno *discet)
+{
+    switch(maior_c)
+    {
+        
+        case 0:
+        {
+            
+            if(clas[1] > clas[2])
+            {
+                printf("1º) Materias téoricas\n");
+                printf("2º) Matérias de Cálculo\n");
+                printf("3º) Matérias de Programção/Computação\n");
+            }
+
+            else if (clas[1] < clas[2])
+            {
+                printf("1º) Materias Teóricas\n");
+                printf("2º) Matérias de Programção/Computação\n");
+                printf("3º) Matérias de Cálculo\n");
+            }
+
+            else
+            {
+                printf("1º) Materias Teóricas\n");
+                printf("2º) Matérias de Cálculo ou Matérias de Prgramação/Computação\n");
+                
+            }
+            break;
+        }
+
+        case 1:
+        {
+            if(clas[0] > clas[2])
+            {
+                printf("1º) Matérias de Cálculo\n");
+                printf("2º) Materias Teóricas\n");
+                printf("3º) Matérias de Programção/Computação\n");
+            }
+
+            else if (clas[0] < clas[2])
+            {
+                printf("1º) Matérias de Cálculo\n");
+                printf("2º) Matérias de Programção/Computação\n");
+                printf("3º) Materias téoricas\n");
+            }
+
+            else
+            {
+                printf("1º) Materias Cálculo\n");
+                printf("2º) Matérias de Teóricas ou Matérias de Prgramação/Computação\n");
+                
+            }
+            
+            break;
+        }
+
+        case 2:
+        {
+            if(clas[0] > clas[1])
+            {
+                printf("1º) Matérias de Programção/Computação\n");
+                printf("2º) Materias Teóricas\n");
+                printf("3º) Matérias de Cálculo\n");
+            }
+
+            else if (clas[0] < clas[1])
+            {
+                printf("1º) Matérias de Programção/Computação\n");
+                printf("2º) Matérias de Cálculo\n");
+                printf("3º) Materias Teóricas\n");
+            }
+
+            else
+            {
+                printf("1º) Materias Prgramação/Computação\n");
+                printf("2º) Matérias de Teóricas ou Matérias de Cálculo \n");
+                
+            }
+
+            break;
+        }
+    }
+}
+
 
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
 {
