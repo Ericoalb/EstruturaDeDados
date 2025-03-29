@@ -1,5 +1,5 @@
 #include "funcoes.h"
-#define TAM 9
+#define TAM 17
 
 int main ()
 {
@@ -7,10 +7,12 @@ int main ()
     float media;
     float soma = 0;
     int clas[3] = {0}; // array para armazenar a classe da disciplina
+    int cond;
 
-    media = Entrada(TAM, 0, &discet);
-    
+    Preencha(&discet);
 
+    media = Entrada(TAM, 0, &discet, 0, 0);
+    scanf("%d", &cond);
     // Printatndo // desordenado
     for(int i = 0; i < TAM; i++)
     {
@@ -18,9 +20,9 @@ int main ()
         {
             int j = 0;
             printf("(");
-            while(j < TAM)
+            while(j < 1)
             {
-                printf("%d, ", discet.periodo[j]);
+                printf("%d ", discet.periodo[j]);
                 j++;
             }
             printf(")\n");
@@ -32,7 +34,7 @@ int main ()
     }
 
     // Ordenando as médias em ordem decrescente
-    Ordene(TAM, &discet);
+    Ordene(discet.ic, &discet);
 
     printf("\n\n");
 
@@ -43,9 +45,9 @@ int main ()
         {
             int j = 0;
             printf("(");
-            while(j < TAM)
+            while(j < 1)
             {
-                printf("%d, ", discet.periodo[j]);
+                printf("%d ", discet.periodo[j]);
                 j++;
             }
             printf(")\n");
@@ -109,142 +111,47 @@ int main ()
     printf("\n%d\n", maior_c);
 
     // Verificando quais matérias podemos alocar(adiantar) para o aluno;
-    int indi = 0;
-    for(int i = (discet.periodo[0] + 1); i < 8; i++) // Percorrendo as diciplinas a partir do semestre informado + 1
+
+    switch(discet.fluxo)
     {
-        for (int j = 0; j < 5; j++)
+        case 1:
         {
-            if(quadro[i][j].pre == 0) // Verificando se existe pre-requisito, nesse caso não tem;
+            Grade(&discet);
+            Aloque(&discet);
+            if(discet.id > 0)
             {
-                int cont = 0;
-                for(int k = 0; k < 5; k++) // Irei comparar a diciplina da linha i, com todas as diciplinas das linha i - 1, 
-                {                          // para achar algum choque de horário
-                    
-                    if(strcmp(quadro[i][j].horario, quadro[i - 1][k].horario) == 0) cont = 1; // Verificando se ha choque de horários;
+                printf("Disciplinas que você pode adiantar:\n");
+                ImprimaDisc(&discet);
+                printf("\n");
+            }
 
-                    if (cont == 1) break;
-                }
-
-                if (cont == 0)
+            switch(maior_c)
+            {
+                case 0:
                 {
-                    strcpy(discet.disc[indi], quadro[i][j].codigo); // copiando o código da materia para as diciplinas que podem se adiantadas 
-                    indi++; // salvando a quantida de de disciplinas;
+                    printf("Com base em seu desempenho, priorize matérias de cunho teórico\n");
+                    break;
+                }
+
+                case 1:
+                {
+                    printf("Com base em seu desempenho acadêmico, priorize matérias voltadas para o cálculo\n");
+                    break;
+                }
+
+                case 2:
+                {
+                    printf("Com base em seu desempenho acadêmico, priorize matérias que sejam de computação/programação\n");
                 }
             }
-
-            else if (quadro[i][j].pre == 1) // existe o pre-requisito
-            {
-               int sum = 0;
-               switch(quadro[i][j].requi.quant) // Escolhendo quantas matérias de pre-requisitos são necessárias;
-               {
-                    case 1: // Somente 1 pre-requisito
-                    {
-                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
-                        {
-                            for(int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
-                            {
-                                if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) // Verificando se o aluno tem a matérias necessária
-                                {
-                                    int cont = 0;
-                                    for(int n = 0; n = 5; n ++) // Verificando se ha choque de horário com as diciplinas;
-                                    {
-                                        if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; 
-                                        if (cont = 1) break;
-
-                                    }
-
-                                    if (cont == 0)
-                                    {
-                                        strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
-                                        indi++;
-                                    }
-                                }
-                            }
-                        }
-
-                        break;
-                    }
-
-                    case 2: // 2 pre-requisitos
-                    {
-                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
-                        {
-                            for( int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
-                            {
-                                if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) sum++;
-                                
-                            }
-                        }
-
-                        if (sum == 2) // verificando se os 2 pre-requisitos foram atendidos
-                        {
-                            int cont = 0;
-                            for(int n = 0; n = 5; n ++) // Verificando se ha choque de horário com as diciplinas;
-                            {
-                                if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; // Verificando se ha choque de horário
-                                if (cont = 1) break;
-
-                            }
-
-                            if (cont == 0)
-                            {
-                                strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
-                                indi++;
-                            }
-
-
-                        }
-
-                        break;
-                    }
-
-                    case 3: // 3 matérias são postas como pre-requisito, porém somente duas são necessárias
-                    {
-                        int check = 0;
-                        for(int l = 0; l < TAM; l++) // Percorrendo as materias cursadas pelo Aluno;
-                        {
-                            for(int m = 0; m < 3; m++) // Percorrendo as pre-requisitos das materias que o aluno pretende cursar;
-                            { 
-                                if (m != 2) // as duas primeiras materias são um (OU), o aluno só precisar ter uma das duas 
-                                {
-                                    if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) sum++;
-                                }
-
-                                else // Essa matéria é obrigarótóri
-                                {
-                                    if(strcmp(discet.cod[l], quadro[i][j].requi.requi[m]) == 0) check = 1;
-                                }
-                            }
-
-                            if(sum > 0 && check > 0) // Verificando se o aluno já cursou pelo menos uma das duas primeiras && se cursou a terceira
-                            {
-                                int cont = 0;
-                                for(int n = 0; n = 5; n ++)
-                                {
-                                    if(strcmp(quadro[i][j].horario, quadro[i - 1][n].horario) == 0) cont = 1; // Verificando se ha choque de horário
-                                    if (cont = 1) break;
-
-                                }
-
-                                if (cont == 0)
-                                {
-                                    strcpy(discet.disc[indi], quadro[i][j].codigo); // Copiando a matérias da tabela de disciplinas para o lista de disciplinas que o aluno pode cursar!
-                                    indi++;
-                                }
-                            }
-                        }
-
-                        break;
-                    }
-                }
-            }
+            
+            Horario(&discet);
         }
-    }
 
-    printf("\n%d\n", indi);
-    for(int i = 0; i < indi; i ++)
-    {
-        printf("%s ", discet.disc[i]);
+        case 2:
+        {
+
+        }
     }
 
     return 0;
