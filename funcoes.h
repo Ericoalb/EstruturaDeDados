@@ -6,6 +6,7 @@ void SemPrepo(char nome[50]);
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4]);
 float Entrada(int TAM, float soma, Aluno *discet, int ic, int ip);
 int MaiorClasse(int *clas);
+void substituirVirgulaPorPonto(char *str);
 
 // FUNÇÕES DE TABELA
 void MontarGrade(int i, disciplina[8][5], disciplina minha_grade[8][8]);
@@ -24,6 +25,13 @@ void ImprimaDisc(Aluno *discet);
 void ClasPriori(int maior_c, int *clas, Aluno *discet);
 int PrioridadeDisc(Aluno *discet, int index);
 
+// Substituindo a vírgula por ponto na string para converter para float
+void substituirVirgulaPorPonto(char *str) {
+    while (*str) {
+        if (*str == ',') *str = '.';
+        str++;
+    }
+}
 
 // Scrit das Funcoes
 float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
@@ -31,50 +39,57 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
     discet->ip = 0;
     discet->ic = 0;
     int div = 0;
-    // lendo meus períodos
-    for (int i = 0; i < 1; i++)
-    {
-        scanf("%d", &discet->periodo[i]);
-    }
-
-    scanf("%d", &discet->fluxo);
- 
-    // Lendo minhas notas:
     
-    for(int i = 0; i < TAM; i++)
-    {
-        scanf("%f", &discet->media[i]);
+    FILE *arquivo = fopen("data/dados.csv", "r");
+    if (!arquivo) {
+        printf("Erro ao abrir o arquivo.\n");
+        return -1;
     }
+    
+    char linha[256];
+    
+    // lendo período e fluxo
+    if (fgets(linha, sizeof(linha), arquivo)) {
+        char *token = strtok(linha, ";\n");
+        token = strtok(NULL, ";\n"); // Captura o número de períodos
+        if (token) {
+            discet->periodo[0] = atoi(token);
+            token = strtok(NULL, ";\n");
+            if (token) {
+                discet->fluxo = atoi(token);
+            }
+        }
+    }
+    
+    // Lendo disciplinas
+    for (int i = 0; i < TAM && fgets(linha, sizeof(linha), arquivo); i++) {
+        char *token = strtok(linha, ";\n");
+        if (token) {
+            strcpy(discet->temp_cod[i], token);
+        }
 
-    // lendo meus códigos da turma;
-    for(int i = 0; i < TAM; i++)
-    {
-        if(discet->media[i] >= 7)
-        {
-            scanf("%s", discet->temp_cod[i]);
-            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
+        token = strtok(NULL, ";\n"); // Nome da disciplina (ignorado)
+        
+        token = strtok(NULL, ";\n"); // Nota
+        if (token) {
+            substituirVirgulaPorPonto(token);
+            discet->media[i] = atof(token);
+        }
+
+        if (discet->media[i] >= 7) {
             discet->ic += 1;
             div += 1;
             soma += discet->media[i];
-        }
-
-        else if (discet->media[i] == -1)
-        {
-            scanf("%s", discet->temp_cod[i]);
-            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
+        } else if (discet->media[i] == -1) {
             discet->ip += 1;
-        }
-
-        else
-        {
-            scanf("%s", discet->temp_cod[i]);
-            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
+        } else {
             discet->ip += 1;
             div += 1;
             soma += discet->media[i];
         }
     }
- 
+    
+    fclose(arquivo);
     return (soma / div);
 }
 
