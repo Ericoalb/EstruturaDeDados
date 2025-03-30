@@ -13,14 +13,16 @@ void Grade(Aluno *discet);
 
 //Funções de Ordenação;
 void Ordene(int TAM, Aluno *discet);
+void Separe(Aluno *discet, int TAM);
 
 
 //Função do aluno
 void Preencha(Aluno *discet);
-void Aloque(Aluno *discet);
+void Aloque(Aluno *discet, int num);
 void Horario(Aluno *discet);
 void ImprimaDisc(Aluno *discet);
 void Prioridades(int maior_c, int *clas, Aluno *discet);
+int PrioridadeDisc(Aluno *discet);
 
 
 // Scrit das Funcoes
@@ -49,8 +51,8 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
     {
         if(discet->media[i] >= 7)
         {
-            scanf("%s", discet->cod[i]);
-            discet->cod[i][strcspn(discet->cod[i], "\n")] = '\0';
+            scanf("%s", discet->temp_cod[i]);
+            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
             discet->ic += 1;
             div += 1;
             soma += discet->media[i];
@@ -58,15 +60,15 @@ float Entrada(int TAM, float soma, Aluno *discet, int i_c, int i_p)
 
         else if (discet->media[i] == -1)
         {
-            scanf("%s", discet->cod_p[i]);
-            discet->cod_p[i][strcspn(discet->cod_p[i], "\n")] = '\0';
+            scanf("%s", discet->temp_cod[i]);
+            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
             discet->ip += 1;
         }
 
         else
         {
-            scanf("%s", discet->cod_p[i]);
-            discet->cod_p[i][strcspn(discet->cod_p[i], "\n")] = '\0';
+            scanf("%s", discet->temp_cod[i]);
+            discet->temp_cod[i][strcspn(discet->temp_cod[i], "\n")] = '\0';
             discet->ip += 1;
             div += 1;
             soma += discet->media[i];
@@ -103,9 +105,9 @@ void Ordene(int TAM, Aluno *discet)
 
 
                 char temp[20];
-                strcpy(temp, discet->cod[i]);
-                strcpy(discet->cod[i], discet->cod[j]);
-                strcpy(discet->cod[j], temp);
+                strcpy(temp, discet->temp_cod[i]);
+                strcpy(discet->temp_cod[i], discet->temp_cod[j]);
+                strcpy(discet->temp_cod[j], temp);
 
                 // Ao ordenar a média, também ordeno o código da disciplina
                 // assim a ao acessa a posição discet.media[0] e discent.cod[0]
@@ -117,6 +119,26 @@ void Ordene(int TAM, Aluno *discet)
     }
 
     return;
+}
+
+void Separe(Aluno *discet, int TAM)
+{
+    int ic = 0, ip = 0;
+    
+    for (int i = 0; i < TAM; i++)
+    {
+        if(discet->media[i] >= 7)
+        {
+            strcpy(discet->cod[ic], discet->temp_cod[i]);
+            ic += 1;
+        }
+
+        else 
+        {
+            strcpy(discet->cod_p[ip], discet->temp_cod[i]);
+            ip += 1;
+        }
+    }
 }
 
 int MaiorClasse(int *clas)
@@ -140,7 +162,7 @@ int MaiorClasse(int *clas)
     return maior;
 }
 
-void Aloque(Aluno *discet)
+void Aloque(Aluno *discet, int num)
 {
 
     discet->id = 0;
@@ -1083,7 +1105,7 @@ void Prioridades(int maior_c, int *clas, Aluno *discet)
             
             if(clas[1] > clas[2])
             {
-                printf("1º) Materias téoricas\n");
+                printf("1º) Materias Teóricas\n");
                 printf("2º) Matérias de Cálculo\n");
                 printf("3º) Matérias de Programção/Computação\n");
             }
@@ -1117,13 +1139,13 @@ void Prioridades(int maior_c, int *clas, Aluno *discet)
             {
                 printf("1º) Matérias de Cálculo\n");
                 printf("2º) Matérias de Programção/Computação\n");
-                printf("3º) Materias téoricas\n");
+                printf("3º) Materias Teóricas\n");
             }
 
             else
             {
-                printf("1º) Materias Cálculo\n");
-                printf("2º) Matérias de Teóricas ou Matérias de Prgramação/Computação\n");
+                printf("1º) Materias de Cálculo\n");
+                printf("2º) Matérias Teóricas ou Matérias de Prgramação/Computação\n");
                 
             }
             
@@ -1148,14 +1170,43 @@ void Prioridades(int maior_c, int *clas, Aluno *discet)
 
             else
             {
-                printf("1º) Materias Prgramação/Computação\n");
+                printf("1º) Materias de Prgramação/Computação\n");
                 printf("2º) Matérias de Teóricas ou Matérias de Cálculo \n");
                 
             }
 
             break;
         }
+
     }
+}
+
+int PrioridadeDisc(Aluno *discet)
+{
+    int count = 0;
+
+    for(int i = 0; i < discet->ip; i++) // Navegando pelas disciplinas peridadas
+    {
+        for(int j = discet->periodo[0]; j < 7; j++) // Navegando pelas linhas do meu qudro de discipinas
+        {
+            for(int k = 0; k < discet->dis_obg[j]; k++) // Percorrendo pelas colunas de cada linha
+            {
+              if(quadro[j][k].pre == 1)
+              {
+                for(int l = 0; l < quadro[j][k].requi.quant; l++)
+                {
+                    if(strcmp(discet->cod_p[i], quadro[j][k].requi.requi[l]) == 0)
+                    {
+                        count += 1;
+                    }
+                }
+
+              }
+            }
+        }
+    }
+
+    return count;
 }
 
 
@@ -1272,7 +1323,7 @@ void Grade(Aluno *discet)
     printf("|        |       |                                                 |\n");
     for(int i = 0; i < discet->dis_obg[discet->periodo[0]]; i++)
     {
-    printf("|   %d    |%s|           %s                                        |\n", discet->periodo[0], quadro[discet->periodo[0]][i].codigo, quadro[discet->periodo[0]][i].nome);
+    printf("|   %d    |%s|           %s                                        |\n", discet->periodo[0] + 1, quadro[discet->periodo[0]][i].codigo, quadro[discet->periodo[0]][i].nome);
     printf("|________|_______|_________________________________________________|\n");
     }
 }

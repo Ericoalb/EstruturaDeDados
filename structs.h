@@ -40,8 +40,9 @@ typedef struct
 typedef struct 
 {
     int periodo[8]; // Período do Aluno
-    char cod[50][8]; // Codigo das Disciplinas que já foram cursadas
-    char cod_p[50][8]; // Codigo das Disciplinas Perdidas
+    char temp_cod[50][8]; // Recebe todas as disciplinas
+    char cod[50][8]; // Recebe o Codigo das Disciplinas que já foram cursadas
+    char cod_p[50][8]; // Recebe Codigo das Disciplinas Perdidas
     float media[50]; // Media das disciplinas cursadas
     cursada disc[10]; // Disciplinas que o Aluno poderá adiantar / ou deverá pagar novamente!
     int dis_obg[8];    // Número de disciplinas obrigaŕorias em casda período.
@@ -67,7 +68,8 @@ disciplina quadro[8][5] = {{{"LOGICA PARA COMPUTACAO", "COMP360", 72, "2M34", 0,
                            {{"TEORIA DA COMPUTACAO", "COMP376", 72, "24T12", 0, 0}, {"PROJETO E ANALISE DE ALGORITMOS", "COMP374", 72, "25M56", 2, 1, "COMP364", "COMP369", "*", 2}, {"PROGRAMACAO 3", "COMP373", 72, "34T34", 2, 1, "COMP364", "COMP365", "COMP368", 3}, {"PROGRAMACAO 2", "COMP372", 72, "35T12", 2, 1, "COMP364", "COMP365", "COMP368", 3},{"PRATICA DE EXTENSAO EM CIENCIA DA COMPUTACAO 1", "COMP377", 75, "5M12"}},
                            {{"SISTEMAS OPERACIONAIS", "COMP378", 72,"24M34", 0, 1, "COMP366", "*", "*", 1}, {"COMPILADORES", "COMP379", 72, "24M56", 2, 1, "COMP364", "COMP376", "*", 2}, {"INTELIGENCIA ARTIFICIAL", "COMP380", 72, "35M34", 2, 1, "COMP364", "COMP360", "*", 2},{"COMPUTACAO GRAFICA", "COMP381", 72, "36M56", 2, 0}},
                            {{"PROJETO E DESENVOLVIMENTO DE SISTEMAS", "COMP382", 288, "2356T1234", 2, 1,"COMP364","COMP370", "COMP374", 4}},
-                           {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34", 0, 0}, {"NOCOES DE DIREITO", "COMP387", 72, "5T1234", 0, 0}}};
+                           {{"MET. DA PESQ. E DO TRABALHO", "COMP386", 72, "35M34", 0, 0}, {"NOCOES DE DIREITO", "COMP387", 72, "5T1234", 0, 0}},
+                           {{"Eletivas e TCC"}}};
 
                         // Matriz de estuturas para armazenar em cada posição a "estrutura matriz" com  
                         // sua rescptiva letra e peso/valor

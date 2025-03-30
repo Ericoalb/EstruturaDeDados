@@ -12,7 +12,8 @@ int main ()
     Preencha(&discet);
 
     media = Entrada(TAM, 0, &discet, 0, 0);
-    scanf("%d", &cond);
+
+    /*
     // Printatndo // desordenado
     for(int i = 0; i < TAM; i++)
     {
@@ -29,14 +30,17 @@ int main ()
         }
 
 
-        printf("%s %.2f\n", discet.cod[i], discet.media[i]);    
+        printf("%s %.2f\n", discet.temp_cod[i], discet.media[i]);    
         
     }
+    */
 
     // Ordenando as médias em ordem decrescente
-    Ordene(discet.ic, &discet);
-
+    Ordene(TAM, &discet);
+    Separe(&discet, TAM);
     printf("\n\n");
+
+    /*
 
     // Printatndo // Ordenado
     for(int i = 0; i < TAM; i++)
@@ -54,13 +58,13 @@ int main ()
         }
 
 
-        printf("%s %.2f\n", discet.cod[i], discet.media[i]);    
+        printf("%s %.2f\n", discet.temp_cod[i], discet.media[i]);    
         
     }
 
     printf("Essa é a média: %.2f", media);
-
-
+    */
+    /*
     // Buscando as melhores diciplinas do aluno com base na nota e classe da matéria;
     for(int i = 0; i < TAM; i++)
     {
@@ -99,25 +103,27 @@ int main ()
     }
 
     printf("\n");
-
+    
     for (int i = 0; i < 3; i++)
     {
         printf("%d ", clas[i]);
     }
 
-    
+    */
+
+
     // retornar  a  maior classe (na qual o aluno se saiu melhor, com base na quatida de vezes que ela apreceu)
     int maior_c = MaiorClasse(clas);
-    printf("\n%d\n", maior_c);
+    //printf("\n%d\n", maior_c);
 
     // Verificando quais matérias podemos alocar(adiantar) para o aluno;
-
+    
     switch(discet.fluxo)
     {
         case 1:
         {
             Grade(&discet);
-            Aloque(&discet);
+            Aloque(&discet, 1);
 
             if(discet.id > 0)
             {
@@ -131,11 +137,33 @@ int main ()
             Prioridades(maior_c, clas, &discet);
             printf("\n");
             Horario(&discet);
+            printf("\n");
+
+            break;
         }
 
         case 2:
         {
+            int count;
+            Grade(&discet);
+            Aloque(&discet, 0);
+            printf("\n");
 
+            if(discet.id > 0)
+            {
+                printf("Disciplinas que você pode adiantar:\n");
+                ImprimaDisc(&discet);
+                printf("\n");
+            }
+
+            Horario(&discet);
+            printf("\n");
+            count = PrioridadeDisc(&discet);
+
+            printf("%s ", discet.cod_p[0]);
+            printf("Esse é o count %d\n", count);
+
+            break;
         }
     }
 
