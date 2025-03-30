@@ -118,54 +118,116 @@ int main ()
 
     // Verificando quais matérias podemos alocar(adiantar) para o aluno;
     
-    switch(discet.fluxo)
+    if(discet.periodo[0] < 8)
     {
-        case 1:
+        switch(discet.fluxo)
         {
-            Grade(&discet);
-            Aloque(&discet, 1);
-
-            if(discet.id > 0)
+            case 1:
             {
-                printf("Disciplinas que você pode adiantar:\n");
-                ImprimaDisc(&discet);
+                Grade(&discet);
+                Aloque(&discet, 1);
                 printf("\n");
+
+                if(discet.id > 0)
+                {
+                    printf("Disciplinas que você pode adiantar:\n");
+                    ImprimaDisc(&discet);
+                    printf("\n");
+                }
+    
+                printf("Prioridades de escolhas Com Base no Desempenho Acadêmico\n");
+                ClasPriori(maior_c, clas, &discet);
+                printf("\n");
+
+                ChoqueHorario(&discet);
+                printf("\n");
+                
+                int soma = 0;
+                for(int i = 0; i < discet.id; i++)
+                {
+                    soma += discet.disc[i].carga_hora;
+                }
+
+                printf("%d", soma);
+
+                break;
             }
-
-            printf("Prioridades de escolhas Com Base no Desempenho Acadêmico\n");
-
-            Prioridades(maior_c, clas, &discet);
-            printf("\n");
-            Horario(&discet);
-            printf("\n");
-
-            break;
-        }
-
-        case 2:
-        {
-            int count;
-            Grade(&discet);
-            Aloque(&discet, 0);
-            printf("\n");
-
-            if(discet.id > 0)
+    
+            case 2:
             {
-                printf("Disciplinas que você pode adiantar:\n");
-                ImprimaDisc(&discet);
+                int count;
+                Grade(&discet);
+                Aloque(&discet, 0);
                 printf("\n");
+    
+                if(discet.id > 0)
+                {
+                    printf("DISCIPLINAS QUE VOCÊ PODE ADIANTAR:\n");
+                    ImprimaDisc(&discet);
+                    printf("\n");
+                }
+    
+                ChoqueHorario(&discet);
+                printf("\n\n");
+
+                printf("DISCIPLINAS PENDENTES:\n");
+
+                for(int i = 0; i < discet.ip; i++)
+                {
+                    printf("%s ", discet.cod_p[i]);
+
+                    for (int j = 0; j < 7; j++)
+                    {
+                        for(int k = 0; k < discet.dis_obg[j]; k++)
+                        {
+                            if(strcmp(discet.cod_p[i], quadro[j][k].codigo) == 0)
+                            {   
+                                printf("%s\n", quadro[j][k].nome);
+                                break;
+                            }
+                        }
+                    }
+                                           
+                }
+
+                printf("\n");
+                printf("MATÉRIAS QUE VOCÊ NÃO PODE CURSAR:");
+                for (int i = 0; i < discet.ip; i++)
+                {
+                  
+                    printf("\n");
+                    count = PrioridadeDisc(&discet, i);
+                    printf("\n");
+                    
+                }
+    
+                printf("Esse é o count %d\n", count);
+                
+                if(count > 2)
+                {
+                    printf("Disciplina pendente de Alta prioridade\n");
+                }
+
+                else if (count == 2)
+                {
+                    printf("Disciplina pendente de Médias prioridade\n");
+
+                }
+
+                else
+                {
+                    printf("Disciplina de baixa prioridade\n");
+                }
+                
+
+                
+
+                break;
             }
-
-            Horario(&discet);
-            printf("\n");
-            count = PrioridadeDisc(&discet);
-
-            printf("%s ", discet.cod_p[0]);
-            printf("Esse é o count %d\n", count);
-
-            break;
         }
     }
+
+    
 
     return 0;
 }

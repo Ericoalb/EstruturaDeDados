@@ -19,10 +19,10 @@ void Separe(Aluno *discet, int TAM);
 //Função do aluno
 void Preencha(Aluno *discet);
 void Aloque(Aluno *discet, int num);
-void Horario(Aluno *discet);
+void ChoqueHorario(Aluno *discet);
 void ImprimaDisc(Aluno *discet);
-void Prioridades(int maior_c, int *clas, Aluno *discet);
-int PrioridadeDisc(Aluno *discet);
+void ClasPriori(int maior_c, int *clas, Aluno *discet);
+int PrioridadeDisc(Aluno *discet, int index);
 
 
 // Scrit das Funcoes
@@ -449,6 +449,7 @@ void Aloque(Aluno *discet, int num)
                     strcpy(discet->disc[discet->id].cod, quadro[i][j].codigo); // copiando o código da materia para as diciplinas que podem se adiantadas 
                     strcpy(discet->disc[discet->id].horario, quadro[i][j].horario);
                     strcpy(discet->disc[discet->id].nome, quadro[i][j].nome);
+                    discet->disc[discet->id].carga_hora = quadro[i][j].carga_horaria;
                     discet->id += 1; // salvando a quantida de de disciplinas;
                 }
             }
@@ -843,6 +844,7 @@ void Aloque(Aluno *discet, int num)
                         strcpy(discet->disc[discet->id].cod, quadro[i][j].codigo); // copiando o código da materia para as diciplinas que podem se adiantadas 
                         strcpy(discet->disc[discet->id].horario, quadro[i][j].horario);
                         strcpy(discet->disc[discet->id].nome, quadro[i][j].nome);
+                        discet->disc[discet->id].carga_hora = quadro[i][j].carga_horaria;
                         discet->id += 1; // salvando a quantida de de disciplinas;
                     }
                 }
@@ -854,7 +856,7 @@ void Aloque(Aluno *discet, int num)
 
 }
 
-void Horario(Aluno *discet)
+void ChoqueHorario(Aluno *discet)
 {
     for (int i = 0; i < (discet->id - 1); i++)
     {
@@ -1077,7 +1079,7 @@ void Horario(Aluno *discet)
 
           if ( dia == 1 && turno == 1 && aula == 1)
           {
-            printf("\nDisciplinas com choque de horários:\n%s\n%s", discet->disc[i].nome, discet->disc[j].nome);
+            printf("\nDISCIPLINAAS COM CHOQUE DE HORÁRIOS:\n%s\n%s", discet->disc[i].nome, discet->disc[j].nome);
           } 
              
         }
@@ -1095,7 +1097,7 @@ void ImprimaDisc(Aluno *discet)
     }
 }
 
-void Prioridades(int maior_c, int *clas, Aluno *discet)
+void ClasPriori(int maior_c, int *clas, Aluno *discet)
 {
     switch(maior_c)
     {
@@ -1178,36 +1180,54 @@ void Prioridades(int maior_c, int *clas, Aluno *discet)
             break;
         }
 
+        case 3:
+        {
+            
+        }
+
     }
 }
 
-int PrioridadeDisc(Aluno *discet)
+int PrioridadeDisc(Aluno *discet, int index)
 {
     int count = 0;
 
-    for(int i = 0; i < discet->ip; i++) // Navegando pelas disciplinas peridadas
+    for(int j = discet->periodo[0]; j < 6; j++) // Navegando pelas linhas do meu qudro de discipinas
     {
-        for(int j = discet->periodo[0]; j < 7; j++) // Navegando pelas linhas do meu qudro de discipinas
+        for(int k = 0; k < discet->dis_obg[j]; k++) // Percorrendo pelas colunas de cada linha
         {
-            for(int k = 0; k < discet->dis_obg[j]; k++) // Percorrendo pelas colunas de cada linha
+          if(quadro[j][k].pre == 1)
+          {
+            for(int l = 0; l < quadro[j][k].requi.quant; l++)
             {
-              if(quadro[j][k].pre == 1)
-              {
-                for(int l = 0; l < quadro[j][k].requi.quant; l++)
+                if(quadro[j][k].requi.quant == 4 && l == 0)
                 {
-                    if(strcmp(discet->cod_p[i], quadro[j][k].requi.requi[l]) == 0)
+                    for(int m = 0; m < 21; m++)
                     {
-                        count += 1;
+                        if(strcmp(discet->cod_p[index], pre[m].requi) == 0)
+                        {
+                            printf("%s %s\n", quadro[j][k].nome ,pre[m].requi);
+                            count += 1;
+                        }
                     }
                 }
 
-              }
+                else if (strcmp(discet->cod_p[index], quadro[j][k].requi.requi[l]) == 0)
+                {
+                    printf("%s %s\n", quadro[j][k].nome ,quadro[j][k].requi.requi[l]);
+                    count += 1;
+                }
             }
+
+
+          }
+          
         }
     }
 
     return count;
 }
+
 
 
 int CalcularNome(matriz tabela[3][12], char nome[50], int soma_nome[4])
